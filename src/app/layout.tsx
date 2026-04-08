@@ -17,9 +17,9 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "LinkedIn Visibility Audit — Clevermation",
   description:
-    "Finde in 60 Sekunden heraus, wie sichtbar dein Unternehmen auf LinkedIn wirklich ist — und was du morgen ändern kannst.",
+    "Finden Sie in 60 Sekunden heraus, wie sichtbar Ihr Unternehmen auf LinkedIn wirklich ist — und was Sie morgen ändern können.",
   openGraph: {
-    title: "Wie sichtbar ist dein Unternehmen auf LinkedIn?",
+    title: "Wie sichtbar ist Ihr Unternehmen auf LinkedIn?",
     description:
       "Kostenloser AI-Audit: Score, Analyse und konkrete Empfehlungen in 60 Sekunden.",
     url: "https://linkedin-audit.clevermation.com",

@@ -93,7 +93,7 @@ export default function AuditForm({ onSubmit }: AuditFormProps) {
 
       <div>
         <label className="block text-xs font-medium text-gray mb-1.5 font-[family-name:var(--font-ui)]">
-          Dein LinkedIn Profil
+          Ihr LinkedIn Profil
         </label>
         <div className="relative">
           <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/25 text-xs font-bold font-[family-name:var(--font-ui)]">

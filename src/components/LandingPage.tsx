@@ -25,15 +25,15 @@ export default function LandingPage({ onSubmit }: LandingPageProps) {
         </div>
 
         <h1 className="text-4xl md:text-[52px] font-extrabold leading-[1.1] tracking-tight mb-6">
-          Wie sichtbar ist dein
+          Wie sichtbar ist Ihr
           <br />
           Unternehmen auf{" "}
           <span className="gradient-text">LinkedIn?</span>
         </h1>
 
         <p className="text-lg leading-relaxed text-gray max-w-xl mx-auto mb-12">
-          Finde in 60 Sekunden heraus, wie du im Vergleich zu deiner Branche
-          abschneidest — und was du morgen konkret verbessern kannst.
+          Finden Sie in 60 Sekunden heraus, wie Sie im Vergleich zu Ihrer Branche
+          abschneiden — und was Sie morgen konkret verbessern können.
         </p>
 
         {/* Form Card */}

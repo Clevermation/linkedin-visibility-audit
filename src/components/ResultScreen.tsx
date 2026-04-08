@@ -149,10 +149,10 @@ export default function ResultScreen({ companyName }: ResultScreenProps) {
       <div className="bg-gradient-to-br from-primary to-accent/40 rounded-2xl p-8 md:p-10 max-w-3xl mx-auto mb-8 text-center animate-fade-in-up delay-600 opacity-0">
         <div className="text-3xl mb-4">📧</div>
         <h3 className="text-xl font-bold text-white mb-2">
-          Dein ausführlicher Report ist unterwegs
+          Ihr ausführlicher Report ist unterwegs
         </h3>
         <p className="text-[15px] text-gray mb-6">
-          In wenigen Minuten erhältst du eine detaillierte Analyse mit konkreten
+          In wenigen Minuten erhalten Sie eine detaillierte Analyse mit konkreten
           Handlungsempfehlungen per Mail.
         </p>
         <div className="flex flex-wrap justify-center gap-4 md:gap-6 mb-7">
@@ -176,7 +176,7 @@ export default function ResultScreen({ companyName }: ResultScreenProps) {
       {/* Calendly CTA */}
       <div className="max-w-3xl mx-auto text-center py-6 animate-fade-in-up delay-700 opacity-0">
         <p className="text-[15px] text-white/40 mb-4">
-          Du willst das Problem direkt lösen — nicht nur kennen?
+          Sie wollen das Problem direkt lösen — nicht nur kennen?
         </p>
         <a
           href="#"

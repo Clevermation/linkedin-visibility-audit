@@ -94,6 +94,7 @@ Die vollständige PRD und das UI-Mockup (HTML) liegen unter:
 - `/Users/paulkramer/Clevermation/Intern/Fulfillment/docs/output/UI-LinkedIn-Visibility-Audit.html`
 
 ## Hinweise
+- Immer "Sie" verwenden (formelle Ansprache), kein "du" — Zielgruppe ist C-Level/Mittelstand
 - Immer echte Umlaute verwenden (ä, ö, ü, ß), keine Ersatzschreibweise
 - Firmenname ist "Clevermation", nicht "CleverMation"
 - Zielgruppe: Geschäftsführer und Marketingleiter im deutschen Mittelstand (50-500 MA)

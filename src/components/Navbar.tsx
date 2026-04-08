@@ -10,20 +10,7 @@ export default function Navbar() {
         height={36}
         className="h-7 w-auto opacity-90"
       />
-      <div className="hidden md:flex items-center gap-8">
-        <a
-          href="#so-funktionierts"
-          className="text-sm font-medium text-gray hover:text-white transition-colors"
-        >
-          So funktioniert&apos;s
-        </a>
-        <a
-          href="#faq"
-          className="text-sm font-medium text-gray hover:text-white transition-colors"
-        >
-          FAQ
-        </a>
-      </div>
+      <div className="hidden md:flex items-center gap-8" />
     </nav>
   );
 }
