@@ -5,6 +5,7 @@ import LandingPage from "@/components/LandingPage";
 import LoadingScreen from "@/components/LoadingScreen";
 import ResultScreen from "@/components/ResultScreen";
 import { AuditFormData } from "@/components/AuditForm";
+import Footer from "@/components/Footer";
 
 type Screen = "landing" | "loading" | "result";
 
@@ -34,6 +35,7 @@ export default function Home() {
       {screen === "result" && formData && (
         <ResultScreen companyName={formData.companyName} />
       )}
+      <Footer />
     </main>
   );
 }
