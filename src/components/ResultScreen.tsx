@@ -2,51 +2,98 @@
 
 import { AudienceResult } from "./LoadingScreen";
 
+type BadgeColor = "good" | "warning" | "critical";
+
+interface Metric {
+  icon: string;
+  value: string;
+  label: string;
+  badge: string;
+  badgeColor: BadgeColor;
+  iconBg: string;
+}
+
 // Dummy data — will be replaced by API response later
-const DUMMY_RESULT = {
+const COMPANY_METRICS: Metric[] = [
+  {
+    icon: "👥",
+    value: "1.247",
+    label: "Follower",
+    badge: "Ausbaufähig",
+    badgeColor: "warning",
+    iconBg: "bg-accent/15",
+  },
+  {
+    icon: "📝",
+    value: "2x",
+    label: "Posts / Monat",
+    badge: "Kritisch",
+    badgeColor: "critical",
+    iconBg: "bg-cta/15",
+  },
+  {
+    icon: "📊",
+    value: "1,2%",
+    label: "Engagement-Rate",
+    badge: "Ausbaufähig",
+    badgeColor: "warning",
+    iconBg: "bg-warning/15",
+  },
+  {
+    icon: "🚀",
+    value: "85k",
+    label: "Reichweiten-Potenzial",
+    badge: "Stark",
+    badgeColor: "good",
+    iconBg: "bg-success/15",
+  },
+];
+
+const PROFILE_METRICS: Metric[] = [
+  {
+    icon: "👤",
+    value: "45%",
+    label: "Profil-Optimierung",
+    badge: "Ausbaufähig",
+    badgeColor: "warning",
+    iconBg: "bg-accent/15",
+  },
+  {
+    icon: "✍️",
+    value: "1x",
+    label: "Posts / Monat",
+    badge: "Kritisch",
+    badgeColor: "critical",
+    iconBg: "bg-cta/15",
+  },
+  {
+    icon: "🤝",
+    value: "487",
+    label: "Kontakte",
+    badge: "Ausbaufähig",
+    badgeColor: "warning",
+    iconBg: "bg-warning/15",
+  },
+  {
+    icon: "💬",
+    value: "3,4%",
+    label: "Engagement-Rate",
+    badge: "Stark",
+    badgeColor: "good",
+    iconBg: "bg-success/15",
+  },
+];
+
+const DUMMY_SCORE = {
   score: 34,
   scoreLabel: "Starter",
-  metrics: [
-    {
-      icon: "👥",
-      value: "1.247",
-      label: "Follower",
-      badge: "Ausbaufähig",
-      badgeColor: "warning" as const,
-      iconBg: "bg-accent/15",
-    },
-    {
-      icon: "📝",
-      value: "2x",
-      label: "Posts / Monat",
-      badge: "Kritisch",
-      badgeColor: "critical" as const,
-      iconBg: "bg-cta/15",
-    },
-    {
-      icon: "👤",
-      value: "45%",
-      label: "Profil-Optimierung",
-      badge: "Ausbaufähig",
-      badgeColor: "warning" as const,
-      iconBg: "bg-success/15",
-    },
-    {
-      icon: "🚀",
-      value: "85k",
-      label: "Reichweiten-Potenzial",
-      badge: "Stark",
-      badgeColor: "good" as const,
-      iconBg: "bg-warning/15",
-    },
-  ],
   strength:
-    'Eure Company Page hat eine <strong>klare Positionierung</strong> und professionelle Beschreibung. Das ist eine solide Basis, auf der ihr aufbauen könnt.',
+    'Ihre Company Page hat eine <strong>klare Positionierung</strong> und professionelle Beschreibung. Das ist eine solide Basis, auf der Sie aufbauen können.',
   potential:
-    'Mit <strong>120 Mitarbeitern</strong> könntet ihr <strong>85.000+ Impressionen/Monat</strong> erreichen — aktuell nutzt ihr weniger als 4% davon.',
+    'Mit <strong>120 Mitarbeitern</strong> könnten Sie <strong>85.000+ Impressionen/Monat</strong> erreichen — aktuell nutzen Sie weniger als 4% davon.',
 };
 
-const BADGE_STYLES = {
+const BADGE_STYLES: Record<BadgeColor, string> = {
   good: "bg-success/15 text-success",
   warning: "bg-warning/15 text-warning",
   critical: "bg-danger/15 text-danger",
@@ -58,13 +105,69 @@ const REACHABILITY_STYLES = {
   niedrig: { label: "Niedrig", style: "bg-danger/15 text-danger" },
 };
 
+function MetricCard({ metric }: { metric: Metric }) {
+  return (
+    <div className="bg-card-dark border border-accent/10 rounded-xl p-5 text-center">
+      <div
+        className={`w-10 h-10 rounded-lg ${metric.iconBg} flex items-center justify-center mx-auto mb-3 text-lg`}
+      >
+        {metric.icon}
+      </div>
+      <div className="text-2xl font-extrabold text-white mb-1">
+        {metric.value}
+      </div>
+      <div className="text-xs text-white/40 mb-2">{metric.label}</div>
+      <span
+        className={`inline-block text-[11px] font-semibold px-2.5 py-1 rounded-full font-[family-name:var(--font-ui)] ${
+          BADGE_STYLES[metric.badgeColor]
+        }`}
+      >
+        {metric.badge}
+      </span>
+    </div>
+  );
+}
+
+function MetricSection({
+  title,
+  icon,
+  metrics,
+}: {
+  title: string;
+  icon: string;
+  metrics: Metric[];
+}) {
+  return (
+    <div className="mb-10">
+      <div className="flex items-center gap-2.5 mb-4 max-w-3xl mx-auto">
+        <span className="text-xl">{icon}</span>
+        <h3 className="text-xs font-semibold uppercase tracking-wider text-white/40">
+          {title}
+        </h3>
+      </div>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 max-w-3xl mx-auto">
+        {metrics.map((metric) => (
+          <MetricCard key={metric.label} metric={metric} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 interface ResultScreenProps {
   companyName: string;
+  hasCompany: boolean;
+  hasProfile: boolean;
   audienceResult: AudienceResult | null;
 }
 
-export default function ResultScreen({ companyName, audienceResult }: ResultScreenProps) {
-  const result = DUMMY_RESULT;
+export default function ResultScreen({
+  companyName,
+  hasCompany,
+  hasProfile,
+  audienceResult,
+}: ResultScreenProps) {
+  const result = DUMMY_SCORE;
   const scoreAngle = (result.score / 100) * 360;
 
   return (
@@ -99,31 +202,34 @@ export default function ResultScreen({ companyName, audienceResult }: ResultScre
         </div>
       </div>
 
-      {/* Metric Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 max-w-3xl mx-auto mb-12 animate-fade-in-up delay-400 opacity-0">
-        {result.metrics.map((metric) => (
-          <div
-            key={metric.label}
-            className="bg-card-dark border border-accent/10 rounded-xl p-5 text-center"
-          >
-            <div
-              className={`w-10 h-10 rounded-lg ${metric.iconBg} flex items-center justify-center mx-auto mb-3 text-lg`}
-            >
-              {metric.icon}
-            </div>
-            <div className="text-2xl font-extrabold text-white mb-1">
-              {metric.value}
-            </div>
-            <div className="text-xs text-white/40 mb-2">{metric.label}</div>
-            <span
-              className={`inline-block text-[11px] font-semibold px-2.5 py-1 rounded-full font-[family-name:var(--font-ui)] ${
-                BADGE_STYLES[metric.badgeColor]
-              }`}
-            >
-              {metric.badge}
-            </span>
-          </div>
-        ))}
+      {/* Metric Cards — split by type */}
+      <div className="animate-fade-in-up delay-400 opacity-0">
+        {hasCompany && hasProfile ? (
+          <>
+            <MetricSection
+              title="Company Page"
+              icon="🏢"
+              metrics={COMPANY_METRICS}
+            />
+            <MetricSection
+              title="Persönliches Profil"
+              icon="👤"
+              metrics={PROFILE_METRICS}
+            />
+          </>
+        ) : hasCompany ? (
+          <MetricSection
+            title="Company Page"
+            icon="🏢"
+            metrics={COMPANY_METRICS}
+          />
+        ) : (
+          <MetricSection
+            title="Persönliches Profil"
+            icon="👤"
+            metrics={PROFILE_METRICS}
+          />
+        )}
       </div>
 
       {/* Insights */}
@@ -132,7 +238,7 @@ export default function ResultScreen({ companyName, audienceResult }: ResultScre
           <div className="flex items-center gap-2.5 mb-3">
             <span className="text-xl">✅</span>
             <span className="text-xs font-semibold uppercase tracking-wider text-white/40">
-              Eure Stärke
+              Ihre Stärke
             </span>
           </div>
           <p
@@ -170,7 +276,9 @@ export default function ResultScreen({ companyName, audienceResult }: ResultScre
               <div className="text-3xl font-extrabold gradient-text mb-1">
                 {audienceResult.estimatedSize}
               </div>
-              <div className="text-xs text-white/40 mb-2">Profile auf LinkedIn</div>
+              <div className="text-xs text-white/40 mb-2">
+                Profile auf LinkedIn
+              </div>
               <p className="text-xs text-gray">{audienceResult.sizeContext}</p>
             </div>
 
@@ -181,8 +289,13 @@ export default function ResultScreen({ companyName, audienceResult }: ResultScre
               </div>
               <div className="space-y-2">
                 {audienceResult.topJobTitles.map((job) => (
-                  <div key={job.title} className="flex items-center justify-between">
-                    <span className="text-sm text-white truncate mr-2">{job.title}</span>
+                  <div
+                    key={job.title}
+                    className="flex items-center justify-between"
+                  >
+                    <span className="text-sm text-white truncate mr-2">
+                      {job.title}
+                    </span>
                     <span className="text-xs text-accent font-semibold flex-shrink-0">
                       {job.percentage}
                     </span>
@@ -210,7 +323,9 @@ export default function ResultScreen({ companyName, audienceResult }: ResultScre
                 <div className="text-xs font-semibold text-white/40 mb-1 uppercase tracking-wider">
                   Tipp
                 </div>
-                <p className="text-xs text-gray">{audienceResult.recommendation}</p>
+                <p className="text-xs text-gray">
+                  {audienceResult.recommendation}
+                </p>
               </div>
             </div>
           </div>

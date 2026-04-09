@@ -42,6 +42,8 @@ export default function Home() {
       {screen === "result" && formData && (
         <ResultScreen
           companyName={formData.companyName}
+          hasCompany={!!formData.companyUrl}
+          hasProfile={!!formData.profileUrl}
           audienceResult={audienceResult}
         />
       )}

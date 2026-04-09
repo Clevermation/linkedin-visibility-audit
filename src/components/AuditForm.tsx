@@ -46,8 +46,8 @@ export default function AuditForm({ onSubmit }: AuditFormProps) {
     setForm((prev) => ({ ...prev, [field]: value }));
   };
 
-  const isValid =
-    form.companyName && form.companyUrl && form.profileUrl && form.email;
+  const hasAtLeastOneUrl = form.companyUrl || form.profileUrl;
+  const isValid = form.companyName && hasAtLeastOneUrl && form.email;
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
@@ -77,6 +77,7 @@ export default function AuditForm({ onSubmit }: AuditFormProps) {
       <div>
         <label className="block text-xs font-medium text-gray mb-1.5 font-[family-name:var(--font-ui)]">
           LinkedIn Company Page
+          <span className="text-white/20 font-normal ml-1">(optional)</span>
         </label>
         <div className="relative">
           <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/25 text-xs font-bold font-[family-name:var(--font-ui)]">
@@ -88,7 +89,6 @@ export default function AuditForm({ onSubmit }: AuditFormProps) {
             onChange={(e) => update("companyUrl", e.target.value)}
             placeholder="linkedin.com/company/..."
             className="w-full bg-card-darker border border-accent/15 rounded-lg pl-10 pr-4 py-3 text-sm text-white placeholder:text-white/25 outline-none focus:border-accent/50 transition-colors font-[family-name:var(--font-ui)]"
-            required
           />
         </div>
       </div>
@@ -96,6 +96,7 @@ export default function AuditForm({ onSubmit }: AuditFormProps) {
       <div>
         <label className="block text-xs font-medium text-gray mb-1.5 font-[family-name:var(--font-ui)]">
           Ihr LinkedIn Profil
+          <span className="text-white/20 font-normal ml-1">(optional)</span>
         </label>
         <div className="relative">
           <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/25 text-xs font-bold font-[family-name:var(--font-ui)]">
@@ -107,7 +108,6 @@ export default function AuditForm({ onSubmit }: AuditFormProps) {
             onChange={(e) => update("profileUrl", e.target.value)}
             placeholder="linkedin.com/in/..."
             className="w-full bg-card-darker border border-accent/15 rounded-lg pl-10 pr-4 py-3 text-sm text-white placeholder:text-white/25 outline-none focus:border-accent/50 transition-colors font-[family-name:var(--font-ui)]"
-            required
           />
         </div>
       </div>
