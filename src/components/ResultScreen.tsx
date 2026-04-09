@@ -1,6 +1,6 @@
 "use client";
 
-import { AuditResult, AudienceResult, MetricData } from "./LoadingScreen";
+import { AuditResult, AudienceResult, MetricData, Recommendation } from "./LoadingScreen";
 
 type BadgeColor = "good" | "warning" | "critical";
 
@@ -158,6 +158,7 @@ export default function ResultScreen({
   const potential = auditResult?.potential ?? "Bitte versuchen Sie es erneut oder kontaktieren Sie uns für eine manuelle Analyse.";
   const companyMetrics = auditResult?.companyMetrics ?? DUMMY_COMPANY_METRICS;
   const profileMetrics = auditResult?.profileMetrics ?? DUMMY_PROFILE_METRICS;
+  const recommendations = auditResult?.recommendations ?? [];
   const audienceData = auditResult?.audienceAnalysis ?? null;
 
   const scoreAngle = (score / 100) * 360;
@@ -236,6 +237,58 @@ export default function ResultScreen({
           />
         </div>
       </div>
+
+      {/* Recommendations */}
+      {recommendations.length > 0 && (
+        <div className="max-w-3xl mx-auto mb-8 md:mb-12 animate-fade-in-up delay-500 opacity-0">
+          <div className="flex items-center gap-2.5 mb-4">
+            <span className="text-xl">🎯</span>
+            <h3 className="text-xs font-semibold uppercase tracking-wider text-white/40">
+              Handlungsempfehlungen nach Priorität
+            </h3>
+          </div>
+          <div className="space-y-3">
+            {recommendations.map((rec, i) => {
+              const priorityStyles = {
+                hoch: { bg: "border-danger/30 bg-danger/5", badge: "bg-danger/15 text-danger", label: "Dringend" },
+                mittel: { bg: "border-warning/30 bg-warning/5", badge: "bg-warning/15 text-warning", label: "Wichtig" },
+                niedrig: { bg: "border-accent/20 bg-accent/5", badge: "bg-accent/15 text-accent", label: "Nice-to-have" },
+              };
+              const style = priorityStyles[rec.priority] || priorityStyles.mittel;
+              return (
+                <div
+                  key={i}
+                  className={`border rounded-xl p-4 md:p-5 ${style.bg}`}
+                >
+                  <div className="flex items-start gap-3">
+                    <span className="text-lg font-bold text-white/30 mt-0.5">
+                      {i + 1}
+                    </span>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+                        <span className="text-[15px] font-bold text-white">
+                          {rec.title}
+                        </span>
+                        <span
+                          className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${style.badge}`}
+                        >
+                          {style.label}
+                        </span>
+                      </div>
+                      <p className="text-sm text-gray leading-relaxed mb-2">
+                        {rec.description}
+                      </p>
+                      <p className="text-xs text-accent font-medium">
+                        Impact: {rec.impact}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       {/* Audience Analysis */}
       {audienceData && <AudienceSection data={audienceData} />}

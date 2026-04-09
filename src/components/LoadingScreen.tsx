@@ -23,6 +23,13 @@ export interface MetricData {
   iconBg: string;
 }
 
+export interface Recommendation {
+  priority: "hoch" | "mittel" | "niedrig";
+  title: string;
+  description: string;
+  impact: string;
+}
+
 export interface AuditResult {
   score: number;
   scoreLabel: string;
@@ -30,6 +37,7 @@ export interface AuditResult {
   profileMetrics: MetricData[];
   strength: string;
   potential: string;
+  recommendations: Recommendation[];
   audienceAnalysis: AudienceResult | null;
   categoryScores: {
     companyPage: number;
