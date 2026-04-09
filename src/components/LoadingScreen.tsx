@@ -88,14 +88,14 @@ export default function LoadingScreen({
   const initial = formData.companyName.charAt(0).toUpperCase();
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-6">
+    <div className="min-h-screen flex flex-col items-center justify-center px-4 md:px-6">
       {/* Company info */}
-      <div className="flex items-center gap-4 mb-12">
-        <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center text-2xl font-extrabold text-white">
+      <div className="flex items-center gap-3 md:gap-4 mb-8 md:mb-12">
+        <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center text-xl md:text-2xl font-extrabold text-white">
           {initial}
         </div>
         <div>
-          <div className="text-xl font-bold text-white">
+          <div className="text-lg md:text-xl font-bold text-white">
             {formData.companyName}
           </div>
           <div className="text-sm text-white/40">Analyse läuft...</div>

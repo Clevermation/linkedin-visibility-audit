@@ -107,13 +107,13 @@ const REACHABILITY_STYLES = {
 
 function MetricCard({ metric }: { metric: Metric }) {
   return (
-    <div className="bg-card-dark border border-accent/10 rounded-xl p-5 text-center">
+    <div className="bg-card-dark border border-accent/10 rounded-xl p-4 md:p-5 text-center">
       <div
-        className={`w-10 h-10 rounded-lg ${metric.iconBg} flex items-center justify-center mx-auto mb-3 text-lg`}
+        className={`w-9 h-9 md:w-10 md:h-10 rounded-lg ${metric.iconBg} flex items-center justify-center mx-auto mb-2 md:mb-3 text-base md:text-lg`}
       >
         {metric.icon}
       </div>
-      <div className="text-2xl font-extrabold text-white mb-1">
+      <div className="text-xl md:text-2xl font-extrabold text-white mb-1">
         {metric.value}
       </div>
       <div className="text-xs text-white/40 mb-2">{metric.label}</div>
@@ -145,7 +145,7 @@ function MetricSection({
           {title}
         </h3>
       </div>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 max-w-3xl mx-auto">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4 max-w-3xl mx-auto">
         {metrics.map((metric) => (
           <MetricCard key={metric.label} metric={metric} />
         ))}
@@ -171,13 +171,13 @@ export default function ResultScreen({
   const scoreAngle = (result.score / 100) * 360;
 
   return (
-    <div className="min-h-screen px-6 py-12 md:py-16">
+    <div className="min-h-screen px-4 md:px-6 py-8 md:py-16">
       {/* Header */}
       <div className="text-center mb-12 animate-fade-in-up">
         <h2 className="text-sm font-semibold text-gray mb-2 font-[family-name:var(--font-ui)] uppercase tracking-wider">
           LinkedIn Visibility Audit
         </h2>
-        <h1 className="text-2xl md:text-3xl font-extrabold text-white">
+        <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-white">
           {companyName}
         </h1>
       </div>
@@ -185,13 +185,13 @@ export default function ResultScreen({
       {/* Score Ring */}
       <div className="flex flex-col items-center mb-12 animate-fade-in-up delay-200 opacity-0">
         <div
-          className="score-ring w-48 h-48 rounded-full flex items-center justify-center"
+          className="score-ring w-36 h-36 sm:w-40 sm:h-40 md:w-48 md:h-48 rounded-full flex items-center justify-center"
           style={
             { "--score-angle": `${scoreAngle}deg` } as React.CSSProperties
           }
         >
-          <div className="w-[156px] h-[156px] rounded-full bg-dark-bg flex flex-col items-center justify-center">
-            <span className="text-6xl font-extrabold gradient-text leading-none">
+          <div className="w-[116px] h-[116px] sm:w-[130px] sm:h-[130px] md:w-[156px] md:h-[156px] rounded-full bg-dark-bg flex flex-col items-center justify-center">
+            <span className="text-4xl sm:text-5xl md:text-6xl font-extrabold gradient-text leading-none">
               {result.score}
             </span>
             <span className="text-lg text-white/30 mt-0.5">/100</span>
@@ -233,8 +233,8 @@ export default function ResultScreen({
       </div>
 
       {/* Insights */}
-      <div className="grid md:grid-cols-2 gap-4 max-w-3xl mx-auto mb-12 animate-fade-in-up delay-500 opacity-0">
-        <div className="bg-card-dark border border-accent/10 rounded-xl p-6">
+      <div className="grid md:grid-cols-2 gap-3 md:gap-4 max-w-3xl mx-auto mb-8 md:mb-12 animate-fade-in-up delay-500 opacity-0">
+        <div className="bg-card-dark border border-accent/10 rounded-xl p-4 md:p-6">
           <div className="flex items-center gap-2.5 mb-3">
             <span className="text-xl">✅</span>
             <span className="text-xs font-semibold uppercase tracking-wider text-white/40">
@@ -246,7 +246,7 @@ export default function ResultScreen({
             dangerouslySetInnerHTML={{ __html: result.strength }}
           />
         </div>
-        <div className="bg-card-dark border border-accent/10 rounded-xl p-6">
+        <div className="bg-card-dark border border-accent/10 rounded-xl p-4 md:p-6">
           <div className="flex items-center gap-2.5 mb-3">
             <span className="text-xl">⚡</span>
             <span className="text-xs font-semibold uppercase tracking-wider text-white/40">
@@ -270,7 +270,7 @@ export default function ResultScreen({
             </h3>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-4 mb-4">
+          <div className="grid md:grid-cols-3 gap-3 md:gap-4 mb-4">
             {/* Estimated Size */}
             <div className="bg-card-dark border border-accent/10 rounded-xl p-5 text-center">
               <div className="text-3xl font-extrabold gradient-text mb-1">
@@ -333,12 +333,12 @@ export default function ResultScreen({
       )}
 
       {/* Report Teaser */}
-      <div className="bg-gradient-to-br from-primary to-accent/40 rounded-2xl p-8 md:p-10 max-w-3xl mx-auto mb-8 text-center animate-fade-in-up delay-600 opacity-0">
-        <div className="text-3xl mb-4">📧</div>
-        <h3 className="text-xl font-bold text-white mb-2">
+      <div className="bg-gradient-to-br from-primary to-accent/40 rounded-2xl p-5 md:p-8 lg:p-10 max-w-3xl mx-auto mb-8 text-center animate-fade-in-up delay-600 opacity-0">
+        <div className="text-2xl md:text-3xl mb-3 md:mb-4">📧</div>
+        <h3 className="text-lg md:text-xl font-bold text-white mb-2">
           Ihr ausführlicher Report ist unterwegs
         </h3>
-        <p className="text-[15px] text-gray mb-6">
+        <p className="text-sm md:text-[15px] text-gray mb-4 md:mb-6">
           In wenigen Minuten erhalten Sie eine detaillierte Analyse mit konkreten
           Handlungsempfehlungen per Mail.
         </p>
@@ -367,7 +367,7 @@ export default function ResultScreen({
         </p>
         <a
           href="#"
-          className="inline-flex items-center gap-2 bg-transparent text-white border border-accent/40 hover:border-accent hover:bg-accent/8 rounded-lg px-8 py-3.5 font-semibold text-[15px] transition-all"
+          className="inline-flex items-center gap-2 bg-transparent text-white border border-accent/40 hover:border-accent hover:bg-accent/8 rounded-lg px-5 md:px-8 py-3 md:py-3.5 font-semibold text-sm md:text-[15px] transition-all min-h-[44px]"
         >
           Kostenloses Strategiegespräch buchen &rarr;
         </a>

@@ -69,7 +69,7 @@ export default function AuditForm({ onSubmit }: AuditFormProps) {
           value={form.companyName}
           onChange={(e) => update("companyName", e.target.value)}
           placeholder="z.B. Müller Maschinenbau GmbH"
-          className="w-full bg-card-darker border border-accent/15 rounded-lg px-4 py-3 text-sm text-white placeholder:text-white/25 outline-none focus:border-accent/50 transition-colors font-[family-name:var(--font-ui)]"
+          className="w-full bg-card-darker border border-accent/15 rounded-lg px-4 py-3 text-sm text-white placeholder:text-white/25 outline-none focus:border-accent/50 transition-colors font-[family-name:var(--font-ui)] min-h-[44px]"
           required
         />
       </div>
@@ -88,7 +88,7 @@ export default function AuditForm({ onSubmit }: AuditFormProps) {
             value={form.companyUrl}
             onChange={(e) => update("companyUrl", e.target.value)}
             placeholder="linkedin.com/company/..."
-            className="w-full bg-card-darker border border-accent/15 rounded-lg pl-10 pr-4 py-3 text-sm text-white placeholder:text-white/25 outline-none focus:border-accent/50 transition-colors font-[family-name:var(--font-ui)]"
+            className="w-full bg-card-darker border border-accent/15 rounded-lg pl-10 pr-4 py-3 text-sm text-white placeholder:text-white/25 outline-none focus:border-accent/50 transition-colors font-[family-name:var(--font-ui)] min-h-[44px]"
           />
         </div>
       </div>
@@ -107,7 +107,7 @@ export default function AuditForm({ onSubmit }: AuditFormProps) {
             value={form.profileUrl}
             onChange={(e) => update("profileUrl", e.target.value)}
             placeholder="linkedin.com/in/..."
-            className="w-full bg-card-darker border border-accent/15 rounded-lg pl-10 pr-4 py-3 text-sm text-white placeholder:text-white/25 outline-none focus:border-accent/50 transition-colors font-[family-name:var(--font-ui)]"
+            className="w-full bg-card-darker border border-accent/15 rounded-lg pl-10 pr-4 py-3 text-sm text-white placeholder:text-white/25 outline-none focus:border-accent/50 transition-colors font-[family-name:var(--font-ui)] min-h-[44px]"
           />
         </div>
       </div>
@@ -121,7 +121,7 @@ export default function AuditForm({ onSubmit }: AuditFormProps) {
           value={form.email}
           onChange={(e) => update("email", e.target.value)}
           placeholder="max@mueller-maschinenbau.de"
-          className="w-full bg-card-darker border border-accent/15 rounded-lg px-4 py-3 text-sm text-white placeholder:text-white/25 outline-none focus:border-accent/50 transition-colors font-[family-name:var(--font-ui)]"
+          className="w-full bg-card-darker border border-accent/15 rounded-lg px-4 py-3 text-sm text-white placeholder:text-white/25 outline-none focus:border-accent/50 transition-colors font-[family-name:var(--font-ui)] min-h-[44px]"
           required
         />
       </div>
@@ -133,7 +133,7 @@ export default function AuditForm({ onSubmit }: AuditFormProps) {
         <select
           value={form.industry}
           onChange={(e) => update("industry", e.target.value)}
-          className="w-full bg-card-darker border border-accent/15 rounded-lg px-4 py-3 text-sm text-white/25 outline-none focus:border-accent/50 transition-colors font-[family-name:var(--font-ui)] appearance-none cursor-pointer"
+          className="w-full bg-card-darker border border-accent/15 rounded-lg px-4 py-3 text-sm text-white/25 outline-none focus:border-accent/50 transition-colors font-[family-name:var(--font-ui)] appearance-none cursor-pointer min-h-[44px]"
           style={form.industry ? { color: "white" } : {}}
         >
           <option value="">Branche auswählen...</option>
@@ -167,7 +167,7 @@ export default function AuditForm({ onSubmit }: AuditFormProps) {
         <span className="text-lg">&rarr;</span>
       </button>
 
-      <div className="flex justify-center gap-5 pt-2 text-xs text-white/40 font-[family-name:var(--font-ui)]">
+      <div className="flex flex-wrap justify-center gap-3 md:gap-5 pt-2 text-xs text-white/40 font-[family-name:var(--font-ui)]">
         <span className="flex items-center gap-1">&#10003; 100% kostenlos</span>
         <span className="flex items-center gap-1">&#128274; DSGVO-konform</span>
         <span className="flex items-center gap-1">&#9889; 60 Sek.</span>
