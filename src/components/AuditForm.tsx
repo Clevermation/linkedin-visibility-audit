@@ -8,6 +8,7 @@ export interface AuditFormData {
   profileUrl: string;
   email: string;
   industry: string;
+  targetAudience: string;
 }
 
 interface AuditFormProps {
@@ -33,6 +34,7 @@ export default function AuditForm({ onSubmit }: AuditFormProps) {
     profileUrl: "",
     email: "",
     industry: "",
+    targetAudience: "",
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -141,6 +143,19 @@ export default function AuditForm({ onSubmit }: AuditFormProps) {
             </option>
           ))}
         </select>
+      </div>
+
+      <div>
+        <label className="block text-xs font-medium text-gray mb-1.5 font-[family-name:var(--font-ui)]">
+          Ihre Zielgruppe
+        </label>
+        <textarea
+          value={form.targetAudience}
+          onChange={(e) => update("targetAudience", e.target.value)}
+          placeholder="z.B. Geschäftsführer von IT-Dienstleistern, 20-200 Mitarbeiter, DACH-Region"
+          rows={3}
+          className="w-full bg-card-darker border border-accent/15 rounded-lg px-4 py-3 text-sm text-white placeholder:text-white/25 outline-none focus:border-accent/50 transition-colors font-[family-name:var(--font-ui)] resize-none"
+        />
       </div>
 
       <button

@@ -1,26 +1,74 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import { AuditFormData } from "./AuditForm";
+
+export interface AudienceResult {
+  estimatedSize: string;
+  sizeContext: string;
+  topJobTitles: { title: string; percentage: string }[];
+  reachability: "hoch" | "mittel" | "niedrig";
+  reachabilityReason: string;
+  recommendation: string;
+}
 
 interface LoadingScreenProps {
-  companyName: string;
-  onComplete: () => void;
+  formData: AuditFormData;
+  onComplete: (audienceResult: AudienceResult | null) => void;
 }
 
 const STEPS = [
   { label: "Unternehmensprofil gefunden", duration: 1200 },
   { label: "Persönliches Profil analysiert", duration: 1800 },
-  { label: "Letzte 30 Posts ausgewertet", duration: 2500 },
+  { label: "Zielgruppe auf LinkedIn analysiert", duration: 2500 },
   { label: "Sichtbarkeits-Score berechnet", duration: 2000 },
   { label: "Handlungsempfehlungen abgeleitet", duration: 1500 },
 ];
 
 export default function LoadingScreen({
-  companyName,
+  formData,
   onComplete,
 }: LoadingScreenProps) {
   const [currentStep, setCurrentStep] = useState(0);
+  const apiResult = useRef<AudienceResult | null>(null);
+  const apiDone = useRef(false);
+  const stepsFinished = useRef(false);
 
+  // Fire API call on mount
+  useEffect(() => {
+    if (!formData.targetAudience) {
+      apiDone.current = true;
+      return;
+    }
+
+    fetch("/api/audience", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        targetAudience: formData.targetAudience,
+        industry: formData.industry,
+        companyName: formData.companyName,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (!data.error) {
+          apiResult.current = data;
+        }
+        apiDone.current = true;
+        if (stepsFinished.current) {
+          onComplete(apiResult.current);
+        }
+      })
+      .catch(() => {
+        apiDone.current = true;
+        if (stepsFinished.current) {
+          onComplete(null);
+        }
+      });
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Step animation
   useEffect(() => {
     if (currentStep < STEPS.length) {
       const timer = setTimeout(() => {
@@ -28,13 +76,16 @@ export default function LoadingScreen({
       }, STEPS[currentStep].duration);
       return () => clearTimeout(timer);
     } else {
-      const finish = setTimeout(onComplete, 800);
-      return () => clearTimeout(finish);
+      stepsFinished.current = true;
+      if (apiDone.current) {
+        const finish = setTimeout(() => onComplete(apiResult.current), 800);
+        return () => clearTimeout(finish);
+      }
     }
   }, [currentStep, onComplete]);
 
   const progress = Math.min((currentStep / STEPS.length) * 100, 100);
-  const initial = companyName.charAt(0).toUpperCase();
+  const initial = formData.companyName.charAt(0).toUpperCase();
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-6">
@@ -44,7 +95,9 @@ export default function LoadingScreen({
           {initial}
         </div>
         <div>
-          <div className="text-xl font-bold text-white">{companyName}</div>
+          <div className="text-xl font-bold text-white">
+            {formData.companyName}
+          </div>
           <div className="text-sm text-white/40">Analyse läuft...</div>
         </div>
       </div>
@@ -100,7 +153,9 @@ export default function LoadingScreen({
         <div className="text-center text-sm text-white/30 mt-3">
           {currentStep < STEPS.length
             ? `Noch ca. ${Math.max(5, 25 - currentStep * 5)} Sekunden...`
-            : "Fertig!"}
+            : apiDone.current
+            ? "Fertig!"
+            : "AI analysiert Ihre Zielgruppe..."}
         </div>
       </div>
     </div>

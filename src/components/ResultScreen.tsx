@@ -1,5 +1,7 @@
 "use client";
 
+import { AudienceResult } from "./LoadingScreen";
+
 // Dummy data — will be replaced by API response later
 const DUMMY_RESULT = {
   score: 34,
@@ -50,11 +52,18 @@ const BADGE_STYLES = {
   critical: "bg-danger/15 text-danger",
 };
 
+const REACHABILITY_STYLES = {
+  hoch: { label: "Hoch", style: "bg-success/15 text-success" },
+  mittel: { label: "Mittel", style: "bg-warning/15 text-warning" },
+  niedrig: { label: "Niedrig", style: "bg-danger/15 text-danger" },
+};
+
 interface ResultScreenProps {
   companyName: string;
+  audienceResult: AudienceResult | null;
 }
 
-export default function ResultScreen({ companyName }: ResultScreenProps) {
+export default function ResultScreen({ companyName, audienceResult }: ResultScreenProps) {
   const result = DUMMY_RESULT;
   const scoreAngle = (result.score / 100) * 360;
 
@@ -144,6 +153,69 @@ export default function ResultScreen({ companyName }: ResultScreenProps) {
           />
         </div>
       </div>
+
+      {/* Audience Analysis */}
+      {audienceResult && (
+        <div className="max-w-3xl mx-auto mb-12 animate-fade-in-up delay-500 opacity-0">
+          <div className="flex items-center gap-2.5 mb-4">
+            <span className="text-xl">🎯</span>
+            <h3 className="text-xs font-semibold uppercase tracking-wider text-white/40">
+              Ihre Zielgruppe auf LinkedIn
+            </h3>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-4 mb-4">
+            {/* Estimated Size */}
+            <div className="bg-card-dark border border-accent/10 rounded-xl p-5 text-center">
+              <div className="text-3xl font-extrabold gradient-text mb-1">
+                {audienceResult.estimatedSize}
+              </div>
+              <div className="text-xs text-white/40 mb-2">Profile auf LinkedIn</div>
+              <p className="text-xs text-gray">{audienceResult.sizeContext}</p>
+            </div>
+
+            {/* Top Job Titles */}
+            <div className="bg-card-dark border border-accent/10 rounded-xl p-5">
+              <div className="text-xs font-semibold text-white/40 mb-3 uppercase tracking-wider">
+                Top Job-Titles
+              </div>
+              <div className="space-y-2">
+                {audienceResult.topJobTitles.map((job) => (
+                  <div key={job.title} className="flex items-center justify-between">
+                    <span className="text-sm text-white truncate mr-2">{job.title}</span>
+                    <span className="text-xs text-accent font-semibold flex-shrink-0">
+                      {job.percentage}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Reachability + Recommendation */}
+            <div className="bg-card-dark border border-accent/10 rounded-xl p-5">
+              <div className="text-xs font-semibold text-white/40 mb-3 uppercase tracking-wider">
+                Erreichbarkeit
+              </div>
+              <span
+                className={`inline-block text-sm font-semibold px-3 py-1 rounded-full mb-3 ${
+                  REACHABILITY_STYLES[audienceResult.reachability].style
+                }`}
+              >
+                {REACHABILITY_STYLES[audienceResult.reachability].label}
+              </span>
+              <p className="text-xs text-gray mb-3">
+                {audienceResult.reachabilityReason}
+              </p>
+              <div className="border-t border-white/5 pt-3">
+                <div className="text-xs font-semibold text-white/40 mb-1 uppercase tracking-wider">
+                  Tipp
+                </div>
+                <p className="text-xs text-gray">{audienceResult.recommendation}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Report Teaser */}
       <div className="bg-gradient-to-br from-primary to-accent/40 rounded-2xl p-8 md:p-10 max-w-3xl mx-auto mb-8 text-center animate-fade-in-up delay-600 opacity-0">
