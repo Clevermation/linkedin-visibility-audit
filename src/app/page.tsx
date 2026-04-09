@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useEffect } from "react";
 import LandingPage from "@/components/LandingPage";
-import LoadingScreen, { AudienceResult } from "@/components/LoadingScreen";
+import LoadingScreen, { AuditResult } from "@/components/LoadingScreen";
 import ResultScreen from "@/components/ResultScreen";
 import { AuditFormData } from "@/components/AuditForm";
 import Footer from "@/components/Footer";
@@ -18,7 +18,7 @@ function loadState() {
     return JSON.parse(raw) as {
       screen: Screen;
       formData: AuditFormData;
-      audienceResult: AudienceResult | null;
+      auditResult: AuditResult | null;
     };
   } catch {
     return null;
@@ -28,21 +28,19 @@ function loadState() {
 function saveState(
   screen: Screen,
   formData: AuditFormData | null,
-  audienceResult: AudienceResult | null
+  auditResult: AuditResult | null
 ) {
   if (!formData) return;
   sessionStorage.setItem(
     STORAGE_KEY,
-    JSON.stringify({ screen, formData, audienceResult })
+    JSON.stringify({ screen, formData, auditResult })
   );
 }
 
 export default function Home() {
   const [screen, setScreen] = useState<Screen>("landing");
   const [formData, setFormData] = useState<AuditFormData | null>(null);
-  const [audienceResult, setAudienceResult] = useState<AudienceResult | null>(
-    null
-  );
+  const [auditResult, setAuditResult] = useState<AuditResult | null>(null);
   const [hydrated, setHydrated] = useState(false);
 
   // Restore state from sessionStorage on mount
@@ -50,11 +48,10 @@ export default function Home() {
     const saved = loadState();
     if (saved) {
       setFormData(saved.formData);
-      setAudienceResult(saved.audienceResult);
-      // If they were on loading, go back to result if we have data, otherwise landing
+      setAuditResult(saved.auditResult);
       setScreen(
         saved.screen === "loading"
-          ? saved.audienceResult
+          ? saved.auditResult
             ? "result"
             : "landing"
           : saved.screen
@@ -66,19 +63,19 @@ export default function Home() {
   // Persist state on changes
   useEffect(() => {
     if (hydrated) {
-      saveState(screen, formData, audienceResult);
+      saveState(screen, formData, auditResult);
     }
-  }, [screen, formData, audienceResult, hydrated]);
+  }, [screen, formData, auditResult, hydrated]);
 
   const handleSubmit = (data: AuditFormData) => {
     setFormData(data);
+    setAuditResult(null);
     setScreen("loading");
-    // TODO: Fire n8n webhook here
   };
 
   const handleLoadingComplete = useCallback(
-    (result: AudienceResult | null) => {
-      setAudienceResult(result);
+    (result: AuditResult | null) => {
+      setAuditResult(result);
       setScreen("result");
     },
     []
@@ -103,7 +100,7 @@ export default function Home() {
           companyName={formData.companyName}
           hasCompany={!!formData.companyUrl}
           hasProfile={!!formData.profileUrl}
-          audienceResult={audienceResult}
+          auditResult={auditResult}
         />
       )}
       <Footer />

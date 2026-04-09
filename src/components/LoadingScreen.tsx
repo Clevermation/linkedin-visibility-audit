@@ -12,43 +12,67 @@ export interface AudienceResult {
   recommendation: string;
 }
 
+type BadgeColor = "good" | "warning" | "critical";
+
+export interface MetricData {
+  icon: string;
+  value: string;
+  label: string;
+  badge: string;
+  badgeColor: BadgeColor;
+  iconBg: string;
+}
+
+export interface AuditResult {
+  score: number;
+  scoreLabel: string;
+  companyMetrics: MetricData[];
+  profileMetrics: MetricData[];
+  strength: string;
+  potential: string;
+  audienceAnalysis: AudienceResult | null;
+  categoryScores: {
+    companyPage: number;
+    postingFrequency: number;
+    contentQuality: number;
+    engagementRate: number;
+    personalProfile: number;
+    personalActivity: number;
+    employeeVisibility: number;
+  };
+}
+
 interface LoadingScreenProps {
   formData: AuditFormData;
-  onComplete: (audienceResult: AudienceResult | null) => void;
+  onComplete: (result: AuditResult | null) => void;
 }
 
 const STEPS = [
-  { label: "Unternehmensprofil gefunden", duration: 1200 },
-  { label: "Persönliches Profil analysiert", duration: 1800 },
-  { label: "Zielgruppe auf LinkedIn analysiert", duration: 2500 },
-  { label: "Sichtbarkeits-Score berechnet", duration: 2000 },
-  { label: "Handlungsempfehlungen abgeleitet", duration: 1500 },
+  { label: "LinkedIn-Daten werden abgerufen", duration: 3000 },
+  { label: "Unternehmensprofil analysiert", duration: 4000 },
+  { label: "Persönliches Profil analysiert", duration: 4000 },
+  { label: "Posts & Engagement ausgewertet", duration: 5000 },
+  { label: "AI erstellt Ihre Analyse", duration: 6000 },
 ];
+
+// Total animation time: 22s, but API may take longer — steps loop if needed
+const TOTAL_STEP_TIME = STEPS.reduce((sum, s) => sum + s.duration, 0);
 
 export default function LoadingScreen({
   formData,
   onComplete,
 }: LoadingScreenProps) {
   const [currentStep, setCurrentStep] = useState(0);
-  const apiResult = useRef<AudienceResult | null>(null);
+  const [waitingForApi, setWaitingForApi] = useState(false);
+  const apiResult = useRef<AuditResult | null>(null);
   const apiDone = useRef(false);
-  const stepsFinished = useRef(false);
 
   // Fire API call on mount
   useEffect(() => {
-    if (!formData.targetAudience) {
-      apiDone.current = true;
-      return;
-    }
-
-    fetch("/api/audience", {
+    fetch("/api/audit", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        targetAudience: formData.targetAudience,
-        industry: formData.industry,
-        companyName: formData.companyName,
-      }),
+      body: JSON.stringify(formData),
     })
       .then((res) => res.json())
       .then((data) => {
@@ -56,15 +80,9 @@ export default function LoadingScreen({
           apiResult.current = data;
         }
         apiDone.current = true;
-        if (stepsFinished.current) {
-          onComplete(apiResult.current);
-        }
       })
       .catch(() => {
         apiDone.current = true;
-        if (stepsFinished.current) {
-          onComplete(null);
-        }
       });
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -75,16 +93,26 @@ export default function LoadingScreen({
         setCurrentStep((prev) => prev + 1);
       }, STEPS[currentStep].duration);
       return () => clearTimeout(timer);
+    } else if (apiDone.current) {
+      // Steps done and API done — proceed
+      const finish = setTimeout(() => onComplete(apiResult.current), 800);
+      return () => clearTimeout(finish);
     } else {
-      stepsFinished.current = true;
-      if (apiDone.current) {
-        const finish = setTimeout(() => onComplete(apiResult.current), 800);
-        return () => clearTimeout(finish);
-      }
+      // Steps done but API still running — show waiting state
+      setWaitingForApi(true);
+      const poll = setInterval(() => {
+        if (apiDone.current) {
+          clearInterval(poll);
+          onComplete(apiResult.current);
+        }
+      }, 500);
+      return () => clearInterval(poll);
     }
   }, [currentStep, onComplete]);
 
-  const progress = Math.min((currentStep / STEPS.length) * 100, 100);
+  const progress = apiDone.current
+    ? 100
+    : Math.min((currentStep / STEPS.length) * 95, 95);
   const initial = formData.companyName.charAt(0).toUpperCase();
 
   return (
@@ -132,11 +160,6 @@ export default function LoadingScreen({
               >
                 {step.label}
               </span>
-              {isDone && (
-                <span className="ml-auto text-xs text-white/20 font-[family-name:var(--font-ui)]">
-                  {(STEPS[i].duration / 1000).toFixed(0)}s
-                </span>
-              )}
             </div>
           );
         })}
@@ -151,11 +174,11 @@ export default function LoadingScreen({
           />
         </div>
         <div className="text-center text-sm text-white/30 mt-3">
-          {currentStep < STEPS.length
-            ? `Noch ca. ${Math.max(5, 25 - currentStep * 5)} Sekunden...`
-            : apiDone.current
-            ? "Fertig!"
-            : "AI analysiert Ihre Zielgruppe..."}
+          {waitingForApi
+            ? "Fast fertig — Ihre Daten werden noch verarbeitet..."
+            : currentStep < STEPS.length
+            ? "LinkedIn-Daten werden analysiert..."
+            : "Fertig!"}
         </div>
       </div>
     </div>

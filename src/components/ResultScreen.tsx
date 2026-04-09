@@ -1,97 +1,23 @@
 "use client";
 
-import { AudienceResult } from "./LoadingScreen";
+import { AuditResult, AudienceResult, MetricData } from "./LoadingScreen";
 
 type BadgeColor = "good" | "warning" | "critical";
 
-interface Metric {
-  icon: string;
-  value: string;
-  label: string;
-  badge: string;
-  badgeColor: BadgeColor;
-  iconBg: string;
-}
-
-// Dummy data — will be replaced by API response later
-const COMPANY_METRICS: Metric[] = [
-  {
-    icon: "👥",
-    value: "1.247",
-    label: "Follower",
-    badge: "Ausbaufähig",
-    badgeColor: "warning",
-    iconBg: "bg-accent/15",
-  },
-  {
-    icon: "📝",
-    value: "2x",
-    label: "Posts / Monat",
-    badge: "Kritisch",
-    badgeColor: "critical",
-    iconBg: "bg-cta/15",
-  },
-  {
-    icon: "📊",
-    value: "1,2%",
-    label: "Engagement-Rate",
-    badge: "Ausbaufähig",
-    badgeColor: "warning",
-    iconBg: "bg-warning/15",
-  },
-  {
-    icon: "🚀",
-    value: "85k",
-    label: "Reichweiten-Potenzial",
-    badge: "Stark",
-    badgeColor: "good",
-    iconBg: "bg-success/15",
-  },
+// Dummy data — used as fallback when API fails
+const DUMMY_COMPANY_METRICS: MetricData[] = [
+  { icon: "👥", value: "—", label: "Follower", badge: "Keine Daten", badgeColor: "warning", iconBg: "bg-accent/15" },
+  { icon: "📝", value: "—", label: "Posts / Monat", badge: "Keine Daten", badgeColor: "warning", iconBg: "bg-cta/15" },
+  { icon: "📊", value: "—", label: "Engagement-Rate", badge: "Keine Daten", badgeColor: "warning", iconBg: "bg-warning/15" },
+  { icon: "🚀", value: "—", label: "Reichweiten-Potenzial", badge: "Keine Daten", badgeColor: "warning", iconBg: "bg-success/15" },
 ];
 
-const PROFILE_METRICS: Metric[] = [
-  {
-    icon: "👤",
-    value: "45%",
-    label: "Profil-Optimierung",
-    badge: "Ausbaufähig",
-    badgeColor: "warning",
-    iconBg: "bg-accent/15",
-  },
-  {
-    icon: "✍️",
-    value: "1x",
-    label: "Posts / Monat",
-    badge: "Kritisch",
-    badgeColor: "critical",
-    iconBg: "bg-cta/15",
-  },
-  {
-    icon: "🤝",
-    value: "487",
-    label: "Kontakte",
-    badge: "Ausbaufähig",
-    badgeColor: "warning",
-    iconBg: "bg-warning/15",
-  },
-  {
-    icon: "💬",
-    value: "3,4%",
-    label: "Engagement-Rate",
-    badge: "Stark",
-    badgeColor: "good",
-    iconBg: "bg-success/15",
-  },
+const DUMMY_PROFILE_METRICS: MetricData[] = [
+  { icon: "👤", value: "—", label: "Profil-Optimierung", badge: "Keine Daten", badgeColor: "warning", iconBg: "bg-accent/15" },
+  { icon: "✍️", value: "—", label: "Posts / Monat", badge: "Keine Daten", badgeColor: "warning", iconBg: "bg-cta/15" },
+  { icon: "🤝", value: "—", label: "Kontakte", badge: "Keine Daten", badgeColor: "warning", iconBg: "bg-warning/15" },
+  { icon: "💬", value: "—", label: "Engagement-Rate", badge: "Keine Daten", badgeColor: "warning", iconBg: "bg-success/15" },
 ];
-
-const DUMMY_SCORE = {
-  score: 34,
-  scoreLabel: "Starter",
-  strength:
-    'Ihre Company Page hat eine <strong>klare Positionierung</strong> und professionelle Beschreibung. Das ist eine solide Basis, auf der Sie aufbauen können.',
-  potential:
-    'Mit <strong>120 Mitarbeitern</strong> könnten Sie <strong>85.000+ Impressionen/Monat</strong> erreichen — aktuell nutzen Sie weniger als 4% davon.',
-};
 
 const BADGE_STYLES: Record<BadgeColor, string> = {
   good: "bg-success/15 text-success",
@@ -105,7 +31,7 @@ const REACHABILITY_STYLES = {
   niedrig: { label: "Niedrig", style: "bg-danger/15 text-danger" },
 };
 
-function MetricCard({ metric }: { metric: Metric }) {
+function MetricCard({ metric }: { metric: MetricData }) {
   return (
     <div className="bg-card-dark border border-accent/10 rounded-xl p-4 md:p-5 text-center">
       <div
@@ -135,7 +61,7 @@ function MetricSection({
 }: {
   title: string;
   icon: string;
-  metrics: Metric[];
+  metrics: MetricData[];
 }) {
   return (
     <div className="mb-10">
@@ -154,21 +80,87 @@ function MetricSection({
   );
 }
 
+function AudienceSection({ data }: { data: AudienceResult }) {
+  return (
+    <div className="max-w-3xl mx-auto mb-12 animate-fade-in-up delay-500 opacity-0">
+      <div className="flex items-center gap-2.5 mb-4">
+        <span className="text-xl">🎯</span>
+        <h3 className="text-xs font-semibold uppercase tracking-wider text-white/40">
+          Ihre Zielgruppe auf LinkedIn
+        </h3>
+      </div>
+
+      <div className="grid md:grid-cols-3 gap-3 md:gap-4 mb-4">
+        <div className="bg-card-dark border border-accent/10 rounded-xl p-5 text-center">
+          <div className="text-3xl font-extrabold gradient-text mb-1">
+            {data.estimatedSize}
+          </div>
+          <div className="text-xs text-white/40 mb-2">Profile auf LinkedIn</div>
+          <p className="text-xs text-gray">{data.sizeContext}</p>
+        </div>
+
+        <div className="bg-card-dark border border-accent/10 rounded-xl p-5">
+          <div className="text-xs font-semibold text-white/40 mb-3 uppercase tracking-wider">
+            Top Job-Titles
+          </div>
+          <div className="space-y-2">
+            {data.topJobTitles.map((job) => (
+              <div key={job.title} className="flex items-center justify-between">
+                <span className="text-sm text-white truncate mr-2">{job.title}</span>
+                <span className="text-xs text-accent font-semibold flex-shrink-0">
+                  {job.percentage}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="bg-card-dark border border-accent/10 rounded-xl p-5">
+          <div className="text-xs font-semibold text-white/40 mb-3 uppercase tracking-wider">
+            Erreichbarkeit
+          </div>
+          <span
+            className={`inline-block text-sm font-semibold px-3 py-1 rounded-full mb-3 ${
+              REACHABILITY_STYLES[data.reachability].style
+            }`}
+          >
+            {REACHABILITY_STYLES[data.reachability].label}
+          </span>
+          <p className="text-xs text-gray mb-3">{data.reachabilityReason}</p>
+          <div className="border-t border-white/5 pt-3">
+            <div className="text-xs font-semibold text-white/40 mb-1 uppercase tracking-wider">
+              Tipp
+            </div>
+            <p className="text-xs text-gray">{data.recommendation}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 interface ResultScreenProps {
   companyName: string;
   hasCompany: boolean;
   hasProfile: boolean;
-  audienceResult: AudienceResult | null;
+  auditResult: AuditResult | null;
 }
 
 export default function ResultScreen({
   companyName,
   hasCompany,
   hasProfile,
-  audienceResult,
+  auditResult,
 }: ResultScreenProps) {
-  const result = DUMMY_SCORE;
-  const scoreAngle = (result.score / 100) * 360;
+  const score = auditResult?.score ?? 0;
+  const scoreLabel = auditResult?.scoreLabel ?? "Keine Daten";
+  const strength = auditResult?.strength ?? "Die Analyse konnte nicht durchgeführt werden. Bitte versuchen Sie es erneut.";
+  const potential = auditResult?.potential ?? "Bitte versuchen Sie es erneut oder kontaktieren Sie uns für eine manuelle Analyse.";
+  const companyMetrics = auditResult?.companyMetrics ?? DUMMY_COMPANY_METRICS;
+  const profileMetrics = auditResult?.profileMetrics ?? DUMMY_PROFILE_METRICS;
+  const audienceData = auditResult?.audienceAnalysis ?? null;
+
+  const scoreAngle = (score / 100) * 360;
 
   return (
     <div className="min-h-screen px-4 md:px-6 py-8 md:py-16">
@@ -192,13 +184,14 @@ export default function ResultScreen({
         >
           <div className="w-[116px] h-[116px] sm:w-[130px] sm:h-[130px] md:w-[156px] md:h-[156px] rounded-full bg-dark-bg flex flex-col items-center justify-center">
             <span className="text-4xl sm:text-5xl md:text-6xl font-extrabold gradient-text leading-none">
-              {result.score}
+              {score}
             </span>
             <span className="text-lg text-white/30 mt-0.5">/100</span>
           </div>
         </div>
         <div className="mt-5 inline-flex items-center gap-2 bg-cta/12 text-cta rounded-full px-5 py-2 text-sm font-semibold">
-          ⚠️ {result.scoreLabel} — Großes ungenutztes Potenzial
+          {score >= 70 ? "🏆" : score >= 40 ? "📈" : "⚠️"} {scoreLabel}
+          {score < 70 && " — Großes ungenutztes Potenzial"}
         </div>
       </div>
 
@@ -206,29 +199,13 @@ export default function ResultScreen({
       <div className="animate-fade-in-up delay-400 opacity-0">
         {hasCompany && hasProfile ? (
           <>
-            <MetricSection
-              title="Company Page"
-              icon="🏢"
-              metrics={COMPANY_METRICS}
-            />
-            <MetricSection
-              title="Persönliches Profil"
-              icon="👤"
-              metrics={PROFILE_METRICS}
-            />
+            <MetricSection title="Company Page" icon="🏢" metrics={companyMetrics} />
+            <MetricSection title="Persönliches Profil" icon="👤" metrics={profileMetrics} />
           </>
         ) : hasCompany ? (
-          <MetricSection
-            title="Company Page"
-            icon="🏢"
-            metrics={COMPANY_METRICS}
-          />
+          <MetricSection title="Company Page" icon="🏢" metrics={companyMetrics} />
         ) : (
-          <MetricSection
-            title="Persönliches Profil"
-            icon="👤"
-            metrics={PROFILE_METRICS}
-          />
+          <MetricSection title="Persönliches Profil" icon="👤" metrics={profileMetrics} />
         )}
       </div>
 
@@ -243,7 +220,7 @@ export default function ResultScreen({
           </div>
           <p
             className="text-[15px] leading-relaxed text-gray [&>strong]:text-white [&>strong]:font-semibold"
-            dangerouslySetInnerHTML={{ __html: result.strength }}
+            dangerouslySetInnerHTML={{ __html: strength }}
           />
         </div>
         <div className="bg-card-dark border border-accent/10 rounded-xl p-4 md:p-6">
@@ -255,82 +232,13 @@ export default function ResultScreen({
           </div>
           <p
             className="text-[15px] leading-relaxed text-gray [&>strong]:text-white [&>strong]:font-semibold"
-            dangerouslySetInnerHTML={{ __html: result.potential }}
+            dangerouslySetInnerHTML={{ __html: potential }}
           />
         </div>
       </div>
 
       {/* Audience Analysis */}
-      {audienceResult && (
-        <div className="max-w-3xl mx-auto mb-12 animate-fade-in-up delay-500 opacity-0">
-          <div className="flex items-center gap-2.5 mb-4">
-            <span className="text-xl">🎯</span>
-            <h3 className="text-xs font-semibold uppercase tracking-wider text-white/40">
-              Ihre Zielgruppe auf LinkedIn
-            </h3>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-3 md:gap-4 mb-4">
-            {/* Estimated Size */}
-            <div className="bg-card-dark border border-accent/10 rounded-xl p-5 text-center">
-              <div className="text-3xl font-extrabold gradient-text mb-1">
-                {audienceResult.estimatedSize}
-              </div>
-              <div className="text-xs text-white/40 mb-2">
-                Profile auf LinkedIn
-              </div>
-              <p className="text-xs text-gray">{audienceResult.sizeContext}</p>
-            </div>
-
-            {/* Top Job Titles */}
-            <div className="bg-card-dark border border-accent/10 rounded-xl p-5">
-              <div className="text-xs font-semibold text-white/40 mb-3 uppercase tracking-wider">
-                Top Job-Titles
-              </div>
-              <div className="space-y-2">
-                {audienceResult.topJobTitles.map((job) => (
-                  <div
-                    key={job.title}
-                    className="flex items-center justify-between"
-                  >
-                    <span className="text-sm text-white truncate mr-2">
-                      {job.title}
-                    </span>
-                    <span className="text-xs text-accent font-semibold flex-shrink-0">
-                      {job.percentage}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Reachability + Recommendation */}
-            <div className="bg-card-dark border border-accent/10 rounded-xl p-5">
-              <div className="text-xs font-semibold text-white/40 mb-3 uppercase tracking-wider">
-                Erreichbarkeit
-              </div>
-              <span
-                className={`inline-block text-sm font-semibold px-3 py-1 rounded-full mb-3 ${
-                  REACHABILITY_STYLES[audienceResult.reachability].style
-                }`}
-              >
-                {REACHABILITY_STYLES[audienceResult.reachability].label}
-              </span>
-              <p className="text-xs text-gray mb-3">
-                {audienceResult.reachabilityReason}
-              </p>
-              <div className="border-t border-white/5 pt-3">
-                <div className="text-xs font-semibold text-white/40 mb-1 uppercase tracking-wider">
-                  Tipp
-                </div>
-                <p className="text-xs text-gray">
-                  {audienceResult.recommendation}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      {audienceData && <AudienceSection data={audienceData} />}
 
       {/* Report Teaser */}
       <div className="bg-gradient-to-br from-primary to-accent/40 rounded-2xl p-5 md:p-8 lg:p-10 max-w-3xl mx-auto mb-8 text-center animate-fade-in-up delay-600 opacity-0">
