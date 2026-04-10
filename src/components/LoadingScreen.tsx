@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
+import Image from "next/image";
 import { AuditFormData } from "./AuditForm";
 
 export interface AudienceResult {
@@ -125,8 +126,17 @@ export default function LoadingScreen({
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4 md:px-6">
+      {/* Logo */}
+      <Image
+        src="/clevermation-logo.png"
+        alt="Clevermation"
+        width={160}
+        height={36}
+        className="h-6 md:h-7 w-auto opacity-80 mb-10 md:mb-14"
+      />
+
       {/* Company info */}
-      <div className="flex items-center gap-3 md:gap-4 mb-8 md:mb-12">
+      <div className="flex items-center gap-3 md:gap-4 mb-2">
         <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center text-xl md:text-2xl font-extrabold text-white">
           {initial}
         </div>
@@ -137,6 +147,9 @@ export default function LoadingScreen({
           <div className="text-sm text-white/40">Analyse läuft...</div>
         </div>
       </div>
+      <p className="text-xs text-white/25 mb-8 md:mb-12">
+        Die Analyse dauert ca. 40 Sekunden
+      </p>
 
       {/* Steps */}
       <div className="w-full max-w-md space-y-1">
@@ -185,7 +198,7 @@ export default function LoadingScreen({
           {waitingForApi
             ? "Fast fertig. Ihre Daten werden noch verarbeitet..."
             : currentStep < STEPS.length
-            ? "Die Analyse dauert ca. 60 Sekunden..."
+            ? "LinkedIn-Daten werden analysiert..."
             : "Fertig!"}
         </div>
       </div>

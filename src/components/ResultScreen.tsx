@@ -71,7 +71,7 @@ function MetricSection({
           {title}
         </h3>
       </div>
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-5 max-w-3xl mx-auto">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 md:gap-5 max-w-2xl mx-auto">
         {metrics.map((metric) => (
           <MetricCard key={metric.label} metric={metric} />
         ))}
