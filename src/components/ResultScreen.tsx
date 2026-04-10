@@ -4,19 +4,19 @@ import { AuditResult, AudienceResult, MetricData, Recommendation } from "./Loadi
 
 type BadgeColor = "good" | "warning" | "critical";
 
-// Dummy data — used as fallback when API fails
+// Dummy data, used as fallback when API fails
 const DUMMY_COMPANY_METRICS: MetricData[] = [
-  { icon: "👥", value: "—", label: "Follower", badge: "Keine Daten", badgeColor: "warning", iconBg: "bg-accent/15" },
-  { icon: "📝", value: "—", label: "Posts / Monat", badge: "Keine Daten", badgeColor: "warning", iconBg: "bg-cta/15" },
-  { icon: "📊", value: "—", label: "Engagement-Rate", badge: "Keine Daten", badgeColor: "warning", iconBg: "bg-warning/15" },
-  { icon: "🚀", value: "—", label: "Reichweiten-Potenzial", badge: "Keine Daten", badgeColor: "warning", iconBg: "bg-success/15" },
+  { icon: "👥", value: "-", label: "Follower", badge: "Keine Daten", badgeColor: "warning", iconBg: "bg-accent/15" },
+  { icon: "📝", value: "-", label: "Posts / Monat", badge: "Keine Daten", badgeColor: "warning", iconBg: "bg-cta/15" },
+  { icon: "📊", value: "-", label: "Engagement-Rate", badge: "Keine Daten", badgeColor: "warning", iconBg: "bg-warning/15" },
+  { icon: "🚀", value: "-", label: "Reichweiten-Potenzial", badge: "Keine Daten", badgeColor: "warning", iconBg: "bg-success/15" },
 ];
 
 const DUMMY_PROFILE_METRICS: MetricData[] = [
-  { icon: "👤", value: "—", label: "Profil-Optimierung", badge: "Keine Daten", badgeColor: "warning", iconBg: "bg-accent/15" },
-  { icon: "✍️", value: "—", label: "Posts / Monat", badge: "Keine Daten", badgeColor: "warning", iconBg: "bg-cta/15" },
-  { icon: "🤝", value: "—", label: "Kontakte", badge: "Keine Daten", badgeColor: "warning", iconBg: "bg-warning/15" },
-  { icon: "💬", value: "—", label: "Engagement-Rate", badge: "Keine Daten", badgeColor: "warning", iconBg: "bg-success/15" },
+  { icon: "👤", value: "-", label: "Profil-Optimierung", badge: "Keine Daten", badgeColor: "warning", iconBg: "bg-accent/15" },
+  { icon: "✍️", value: "-", label: "Posts / Monat", badge: "Keine Daten", badgeColor: "warning", iconBg: "bg-cta/15" },
+  { icon: "🤝", value: "-", label: "Kontakte", badge: "Keine Daten", badgeColor: "warning", iconBg: "bg-warning/15" },
+  { icon: "💬", value: "-", label: "Engagement-Rate", badge: "Keine Daten", badgeColor: "warning", iconBg: "bg-success/15" },
 ];
 
 const BADGE_STYLES: Record<BadgeColor, string> = {
@@ -33,16 +33,16 @@ const REACHABILITY_STYLES = {
 
 function MetricCard({ metric }: { metric: MetricData }) {
   return (
-    <div className="bg-card-dark border border-accent/10 rounded-xl p-4 md:p-5 text-center">
+    <div className="bg-card-dark border border-accent/10 rounded-xl p-5 md:p-7 text-center">
       <div
-        className={`w-9 h-9 md:w-10 md:h-10 rounded-lg ${metric.iconBg} flex items-center justify-center mx-auto mb-2 md:mb-3 text-base md:text-lg`}
+        className={`w-9 h-9 md:w-10 md:h-10 rounded-lg ${metric.iconBg} flex items-center justify-center mx-auto mb-3 md:mb-4 text-base md:text-lg`}
       >
         {metric.icon}
       </div>
       <div className="text-xl md:text-2xl font-extrabold text-white mb-1">
         {metric.value}
       </div>
-      <div className="text-xs text-white/40 mb-2">{metric.label}</div>
+      <div className="text-xs text-white/40 mb-3">{metric.label}</div>
       <span
         className={`inline-block text-[11px] font-semibold px-2.5 py-1 rounded-full font-[family-name:var(--font-ui)] ${
           BADGE_STYLES[metric.badgeColor]
@@ -71,7 +71,7 @@ function MetricSection({
           {title}
         </h3>
       </div>
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4 max-w-3xl mx-auto">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-5 max-w-3xl mx-auto">
         {metrics.map((metric) => (
           <MetricCard key={metric.label} metric={metric} />
         ))}
@@ -82,28 +82,28 @@ function MetricSection({
 
 function AudienceSection({ data }: { data: AudienceResult }) {
   return (
-    <div className="max-w-3xl mx-auto mb-12 animate-fade-in-up delay-500 opacity-0">
+    <div className="max-w-3xl mx-auto mb-8 md:mb-12 animate-fade-in-up delay-500 opacity-0">
       <div className="flex items-center gap-2.5 mb-4">
-        <span className="text-xl">🎯</span>
+        <span className="text-xl">🌐</span>
         <h3 className="text-xs font-semibold uppercase tracking-wider text-white/40">
           Ihre Zielgruppe auf LinkedIn
         </h3>
       </div>
 
       <div className="grid md:grid-cols-3 gap-3 md:gap-4 mb-4">
-        <div className="bg-card-dark border border-accent/10 rounded-xl p-5 text-center">
-          <div className="text-3xl font-extrabold gradient-text mb-1">
+        <div className="bg-card-dark border border-accent/10 rounded-xl p-6 text-center">
+          <div className="text-3xl font-extrabold gradient-text mb-2">
             {data.estimatedSize}
           </div>
-          <div className="text-xs text-white/40 mb-2">Profile auf LinkedIn</div>
+          <div className="text-xs text-white/40 mb-3">Profile auf LinkedIn</div>
           <p className="text-xs text-gray">{data.sizeContext}</p>
         </div>
 
-        <div className="bg-card-dark border border-accent/10 rounded-xl p-5">
+        <div className="bg-card-dark border border-accent/10 rounded-xl p-6">
           <div className="text-xs font-semibold text-white/40 mb-3 uppercase tracking-wider">
             Top Job-Titles
           </div>
-          <div className="space-y-2">
+          <div className="space-y-2.5">
             {data.topJobTitles.map((job) => (
               <div key={job.title} className="flex items-center justify-between">
                 <span className="text-sm text-white truncate mr-2">{job.title}</span>
@@ -115,7 +115,7 @@ function AudienceSection({ data }: { data: AudienceResult }) {
           </div>
         </div>
 
-        <div className="bg-card-dark border border-accent/10 rounded-xl p-5">
+        <div className="bg-card-dark border border-accent/10 rounded-xl p-6">
           <div className="text-xs font-semibold text-white/40 mb-3 uppercase tracking-wider">
             Erreichbarkeit
           </div>
@@ -126,8 +126,8 @@ function AudienceSection({ data }: { data: AudienceResult }) {
           >
             {REACHABILITY_STYLES[data.reachability].label}
           </span>
-          <p className="text-xs text-gray mb-3">{data.reachabilityReason}</p>
-          <div className="border-t border-white/5 pt-3">
+          <p className="text-xs text-gray mb-4">{data.reachabilityReason}</p>
+          <div className="border-t border-white/5 pt-4">
             <div className="text-xs font-semibold text-white/40 mb-1 uppercase tracking-wider">
               Tipp
             </div>
@@ -192,11 +192,11 @@ export default function ResultScreen({
         </div>
         <div className="mt-5 inline-flex items-center gap-2 bg-cta/12 text-cta rounded-full px-5 py-2 text-sm font-semibold">
           {score >= 70 ? "🏆" : score >= 40 ? "📈" : "⚠️"} {scoreLabel}
-          {score < 70 && " — Großes ungenutztes Potenzial"}
+          {score < 70 && ". Großes ungenutztes Potenzial"}
         </div>
       </div>
 
-      {/* Metric Cards — split by type */}
+      {/* Metric Cards, split by type */}
       <div className="animate-fade-in-up delay-400 opacity-0">
         {hasCompany && hasProfile ? (
           <>
@@ -212,7 +212,7 @@ export default function ResultScreen({
 
       {/* Insights */}
       <div className="grid md:grid-cols-2 gap-3 md:gap-4 max-w-3xl mx-auto mb-8 md:mb-12 animate-fade-in-up delay-500 opacity-0">
-        <div className="bg-card-dark border border-accent/10 rounded-xl p-4 md:p-6">
+        <div className="bg-card-dark border border-accent/10 rounded-xl p-5 md:p-7">
           <div className="flex items-center gap-2.5 mb-3">
             <span className="text-xl">✅</span>
             <span className="text-xs font-semibold uppercase tracking-wider text-white/40">
@@ -224,7 +224,7 @@ export default function ResultScreen({
             dangerouslySetInnerHTML={{ __html: strength }}
           />
         </div>
-        <div className="bg-card-dark border border-accent/10 rounded-xl p-4 md:p-6">
+        <div className="bg-card-dark border border-accent/10 rounded-xl p-5 md:p-7">
           <div className="flex items-center gap-2.5 mb-3">
             <span className="text-xl">⚡</span>
             <span className="text-xs font-semibold uppercase tracking-wider text-white/40">
@@ -237,6 +237,9 @@ export default function ResultScreen({
           />
         </div>
       </div>
+
+      {/* Audience Analysis (before Recommendations) */}
+      {audienceData && <AudienceSection data={audienceData} />}
 
       {/* Recommendations */}
       {recommendations.length > 0 && (
@@ -258,14 +261,14 @@ export default function ResultScreen({
               return (
                 <div
                   key={i}
-                  className={`border rounded-xl p-4 md:p-5 ${style.bg}`}
+                  className={`border rounded-xl p-5 md:p-6 ${style.bg}`}
                 >
                   <div className="flex items-start gap-3">
                     <span className="text-lg font-bold text-white/30 mt-0.5">
                       {i + 1}
                     </span>
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+                      <div className="flex items-center gap-3 mb-2 flex-wrap">
                         <span className="text-[15px] font-bold text-white">
                           {rec.title}
                         </span>
@@ -275,7 +278,7 @@ export default function ResultScreen({
                           {style.label}
                         </span>
                       </div>
-                      <p className="text-sm text-gray leading-relaxed mb-2">
+                      <p className="text-sm text-gray leading-relaxed mb-3">
                         {rec.description}
                       </p>
                       <p className="text-xs text-accent font-medium">
@@ -289,9 +292,6 @@ export default function ResultScreen({
           </div>
         </div>
       )}
-
-      {/* Audience Analysis */}
-      {audienceData && <AudienceSection data={audienceData} />}
 
       {/* Report Teaser */}
       <div className="bg-gradient-to-br from-primary to-accent/40 rounded-2xl p-5 md:p-8 lg:p-10 max-w-3xl mx-auto mb-8 text-center animate-fade-in-up delay-600 opacity-0">
@@ -324,7 +324,7 @@ export default function ResultScreen({
       {/* Calendly CTA */}
       <div className="max-w-3xl mx-auto text-center py-6 animate-fade-in-up delay-700 opacity-0">
         <p className="text-[15px] text-white/40 mb-4">
-          Sie wollen das Problem direkt lösen — nicht nur kennen?
+          Sie wollen das Problem direkt lösen, nicht nur kennen?
         </p>
         <a
           href="#"

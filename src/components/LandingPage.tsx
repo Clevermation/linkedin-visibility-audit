@@ -33,7 +33,7 @@ export default function LandingPage({ onSubmit }: LandingPageProps) {
 
         <p className="text-base md:text-lg leading-relaxed text-gray max-w-xl mx-auto mb-8 md:mb-12">
           Finden Sie in 60 Sekunden heraus, wie Sie im Vergleich zu Ihrer Branche
-          abschneiden — und was Sie morgen konkret verbessern können.
+          abschneiden, und was Sie morgen konkret verbessern können.
         </p>
 
         {/* Form Card */}

@@ -183,9 +183,9 @@ export default function LoadingScreen({
         </div>
         <div className="text-center text-sm text-white/30 mt-3">
           {waitingForApi
-            ? "Fast fertig — Ihre Daten werden noch verarbeitet..."
+            ? "Fast fertig. Ihre Daten werden noch verarbeitet..."
             : currentStep < STEPS.length
-            ? "LinkedIn-Daten werden analysiert..."
+            ? "Die Analyse dauert ca. 60 Sekunden..."
             : "Fertig!"}
         </div>
       </div>
